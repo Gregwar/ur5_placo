@@ -20,6 +20,7 @@ effector_task.configure("effector", "soft", 1., 1.)
 dt = 0.001
 solver.dt = dt
 t = 0
+last_display = 0
 
 while True:
     T_world_target = tf.translation_matrix([0.5, np.sin(t)*1.0, 0.5])
@@ -30,8 +31,13 @@ while True:
 
     solver.dump_status()
 
-    viz.display(robot.state.q)
-    robot_frame_viz(robot, "ee_link")
-    frame_viz("target", T_world_target)
+    print("q:")
+    print(robot.state.q[-6:])
+
+    if t > last_display + 0.01:
+        last_display = t
+        viz.display(robot.state.q)
+        robot_frame_viz(robot, "ee_link")
+        frame_viz("target", T_world_target)
     time.sleep(dt)
     t += dt
